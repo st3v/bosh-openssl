@@ -16,6 +16,10 @@ module Bosh
         key
       end
 
+      def password
+        Base64.encode64(OpenSSL::Random.random_bytes(16))
+      end
+
       private
 
       SSL_DIR='./.ssl'
