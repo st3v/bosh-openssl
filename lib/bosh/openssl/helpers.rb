@@ -32,7 +32,7 @@ module Bosh
 
       private
 
-      SSL_DIR='./.ssl'
+      SSL_DIR=File.join(File.expand_path('~'), '.bosh', 'openssl')
 
       def generate_certificate
         subject = "/C=BE/O=Test/OU=Test/CN=Test"
