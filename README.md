@@ -1,8 +1,39 @@
 # Bosh OpenSSL plugin
 Bosh CLI plugin to retrieve, or generate and store, RSA keys, self-signed certificates, and random password at deploy time.
 
-## What is BOSH?
-BOSH orchestrates initial deployments and ongoing updates that are: predictable, repeatable, reliable, self-healing, infrastructure-agnostic. You can take a look on [BOSH project on GitHub](https://github.com/cloudfoundry/bosh) and read more details in [docs](http://docs.cloudfoundry.org/bosh/).
+## Why you should care
+
+Generally BOSH operators store secrets in plaintext in their BOSH manifests like this:
+
+```yaml
+properties:
+  admin_password: TXCn0Vv3QWQFn1Ik+8IIfw==
+  cert: |
+    -----BEGIN CERTIFICATE-----
+    MIIDhzCCAm+gAwIBAgIBADANBgkqhkiG9w0BAQUFADA6MQswCQYDVQQGEwJCRTEN
+    MAsGA1UECgwEVGVzdDENMAsGA1UECwwEVGVzdDENMAsGA1UEAwwEVGVzdDAeFw0x
+    NjA1MDYxNTUyNDNaFw0yNjA1MDQxNTUyNDNaMDoxCzAJBgNVBAYTAkJFMQ0wCwYD
+    VQQKDARUZXN0MQ0wCwYDVQQLDARUZXN0MQ0wCwYDVQQDDARUZXN0MIIBIjANBgkq
+    hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA05YhPcD7+FWysWeKFXSHnqmWnL+hKUbh
+    ...snip...
+```
+
+Its just a matter of time before this gets commited to a public GitHub repo...
+
+Use `bosh-openssl` to break this bad habit and just commit this:
+
+```yaml
+  properties:
+    my_secret: <%= get_password 'my_password' %> 
+    cert: <%= get_certificate 'my_cert', 'my_key', '*.example.com' %>
+```
+
+which pulls the secrets into the manifest at `bosh deploy` time from `~/.bosh/openssl`
+or [Vault](https://www.vaultproject.io/).
+
+AND saves you the hassle of having to generate the secrets in the first place.
+
+Remember, friends don't let friends store secrets in plaintext...
 
 ## How to install
 ```
