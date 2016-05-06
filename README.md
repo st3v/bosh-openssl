@@ -1,6 +1,5 @@
 # Bosh OpenSSL plugin
-
-Bosh CLI Plugin to generate RSA keys, self-signed certificates, and random passwords
+Bosh CLI plugin to retrieve, or generate and store, RSA keys, self-signed certificates, and random password at deploy time.
 
 ## What is BOSH?
 BOSH orchestrates initial deployments and ongoing updates that are: predictable, repeatable, reliable, self-healing, infrastructure-agnostic. You can take a look on [BOSH project on GitHub](https://github.com/cloudfoundry/bosh) and read more details in [docs](http://docs.cloudfoundry.org/bosh/).
@@ -19,7 +18,7 @@ The first time `get_*` is called it will generate and store the "secret".
 If you have a valid `VAULT_ADDR` environment variable defined; secrets will be stored 
 in your [Vault](https://www.vaultproject.io/) rather than on your file system
 
-```
+```yaml
   properties:
     my_secret: <%= get_password 'my_password' %> 
     private_key: <%= get_private_key 'my_key' %>
