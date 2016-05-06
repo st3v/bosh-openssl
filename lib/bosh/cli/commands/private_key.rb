@@ -6,9 +6,12 @@ module Bosh::Cli::Command
 
     usage "private key"
     desc "Returns named private key. Generates new key if it doesn't already exist."
+    option "--no-escape", "don't escape newlines in output"
 
     def perform(name)
-      puts private_key(name)
+      out = private_key(name).to_s
+      out = out.dump unless options[:no_escape] == false
+      puts out
     end
 
   end
