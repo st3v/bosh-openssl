@@ -7,8 +7,8 @@ module Bosh::Cli::Command
     usage "private key"
     desc "Returns named private key. Generates new key if it doesn't already exist."
 
-    def perform(key_name)
-      puts private_key(key_name)
+    def perform(name)
+      puts private_key(name)
     end
 
   end

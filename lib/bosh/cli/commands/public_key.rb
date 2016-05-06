@@ -7,8 +7,8 @@ module Bosh::Cli::Command
     usage "public key"
     desc "Returns named public key. Generates new key if it doesn't already exist."
 
-    def perform(key_name)
-      puts public_key(key_name)
+    def perform(name)
+      puts public_key(name)
     end
 
   end
