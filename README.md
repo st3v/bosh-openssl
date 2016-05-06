@@ -12,7 +12,21 @@ gem install bosh-openssl
 
 ## How to use
 
-TODO
+In your BOSH manifest, use the `get_*` helpers to fetch openssl "secrets" from the `~/.bosh/openssl` folder.
+
+The first time `get_*` is called it will generate and store the "secret".
+
+If you have a valid `VAULT_ADDR` environment variable defined; secrets will be stored 
+in your [Vault](https://www.vaultproject.io/) rather than on your file system
+
+```
+  properties:
+    my_secret: <%= get_password 'my_password' %> 
+    private_key: <%= get_private_key 'my_key' %>
+    public_key: <%= get_public_key 'my_key' %>
+    cert: <%= get_certificate 'my_cert', 'my_key', '*.example.com' %>
+    cert_with_key: <%= get_certificate_and_key 'my_cert', 'my_key', '*.example.com' %>
+```
 
 ## Contributing
 
