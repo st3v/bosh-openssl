@@ -13,6 +13,5 @@ module Bosh::Cli::Command
       out = out.dump unless options[:no_escape] == false
       puts out
     end
-
   end
 end

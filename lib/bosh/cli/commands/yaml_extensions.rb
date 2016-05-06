@@ -8,9 +8,9 @@ module Bosh::Cli::Command
         include ::Bosh::Openssl::Helpers
         password name
       end
-      def get_certificate cert_name, key_name
+      def get_certificate cert_name, key_name, common_name
         include ::Bosh::Openssl::Helpers
-        out = certificate(cert_name, key_name).to_s
+        out = certificate(cert_name, key_name, common_name).to_s
         out.dump
       end
       def get_public_key name

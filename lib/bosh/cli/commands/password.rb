@@ -10,7 +10,6 @@ module Bosh::Cli::Command
     def perform(name)
       puts password name
     end
-
   end
 end
 

@@ -27,21 +27,22 @@ module Bosh
         password
       end
 
-      def certificate(cert_name, key_name)
+      def certificate(cert_name, key_name, common_name)
         cert_name += ".crt"
         return read_cert(cert_name) if exists?(cert_name)
 
-        cert = sign_certificate(generate_certificate, key_name)
+        cert = sign_certificate(generate_certificate(common_name), key_name).to_pem
         write(cert_name, cert)
         cert
       end
 
       private
 
-      SSL_DIR='./.ssl'
+      SSL_DIR=File.join(File.expand_path('~'), '.bosh', 'openssl')
 
-      def generate_certificate
-        subject = "/C=BE/O=Test/OU=Test/CN=Test"
+      def generate_certificate(common_name)
+        subject = '/C=AU/O=Test/OU=Test'
+        subject += "/CN=#{common_name}" if common_name
 
         cert = OpenSSL::X509::Certificate.new
         cert.subject = cert.issuer = OpenSSL::X509::Name.parse(subject)
@@ -66,7 +67,7 @@ module Bosh
       def sign_certificate(cert, key_name)
         cert.public_key = public_key(key_name)
         cert.sign private_key(key_name), OpenSSL::Digest::SHA1.new
-        cert.to_pem
+        cert
       end
       
       def read_key(name)
