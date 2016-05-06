@@ -10,7 +10,6 @@ module Bosh::Cli::Command
     def perform
       puts password
     end
-
   end
 end
 
