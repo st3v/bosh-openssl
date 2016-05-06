@@ -1,4 +1,5 @@
 require 'openssl'
+require 'vault'
 
 module Bosh
   module Openssl
@@ -17,8 +18,13 @@ module Bosh
         key
       end
 
-      def password
-        Base64.encode64(OpenSSL::Random.random_bytes(16))
+      def password(name)
+        name += ".passwd"
+        return read(name) if exists?(name)
+
+        password = Base64.encode64(OpenSSL::Random.random_bytes(16))
+        write(name, password)
+        password
       end
 
       def certificate(cert_name, key_name, common_name)
@@ -63,27 +69,59 @@ module Bosh
         cert.sign private_key(key_name), OpenSSL::Digest::SHA1.new
         cert
       end
-
+      
       def read_key(name)
-        OpenSSL::PKey::RSA.new File.read(path(name))
+        OpenSSL::PKey::RSA.new read(name)
       end
 
       def read_cert(name)
-        OpenSSL::X509::Certificate.new File.read(path(name))
+        OpenSSL::X509::Certificate.new read(name)
       end
-
+      
+      def read(name)
+        return read_from_vault(name) if vault_backend_available? 
+        read_file(name)
+      end
+      
       def write(name, payload)
+        return write_to_vault(name, payload) if vault_backend_available? 
+        write_file(name, payload)
+      end
+      
+      def exists?(name)
+        return read_from_vault(name)!='' if vault_backend_available? 
+        File.exists?(path(name))
+      end
+      
+      def vault_backend_available?
+        ENV['VAULT_ADDR'] || false
+      end
+      
+      def read_from_vault(name)
+        secrets = Vault.logical.read("secret/#{name}")
+        return '' if secrets.nil?
+        secrets.data[:value]
+      end
+      
+      def write_to_vault(name, payload)
+        data = {}
+        data[:value] = payload
+        Vault.logical.write("secret/#{name}", data)
+      end
+      
+      def read_file(name)
+        File.read(path(name))
+      end
+      
+      def write_file(name, payload)
         FileUtils::mkdir_p SSL_DIR
         File.open(path(name), 'w') { |file| file.write(payload) }
-      end
-
-      def exists?(name)
-        File.exists?(path(name))
       end
 
       def path(name)
         File.join(SSL_DIR, name)
       end
+      
     end
   end
 end
