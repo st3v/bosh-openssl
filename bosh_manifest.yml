@@ -1,0 +1,109 @@
+---
+name: learn-bosh
+director_uuid: 510ac165-ee99-4c45-8274-1b989e5d5697
+
+releases:
+- name: learn-bosh
+  version: latest
+
+networks:
+- name: default
+  subnets:
+  - range: 10.244.0.0/28
+    reserved: [10.244.0.1]
+    static: [10.244.0.2,10.244.0.6,10.244.0.10]
+    cloud_properties:
+      name: random
+
+resource_pools:
+- name: default
+  stemcell:
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+    version: latest
+  network: default
+  cloud_properties: {}
+
+compilation:
+  workers: 2
+  network: default
+  cloud_properties: {}
+
+update:
+  canaries: 1
+  canary_watch_time: 60000
+  update_watch_time: 60000
+  max_in_flight: 2
+
+jobs:
+- name: app
+  templates:
+  - name: app
+  instances: 1
+  resource_pool: default
+  networks:
+  - name: default
+    static_ips:
+    - 10.244.0.2
+  properties:
+properties:
+  admin_password: TXCn0Vv3QWQFn1Ik+8IIfw==
+  private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEA05YhPcD7+FWysWeKFXSHnqmWnL+hKUbhkWFoIm6xpfFb1AvZ
+    /rNGcVKhsKZqabHCEuMoK75WFGQ/qf5cTYTD6Sw2UT88tfh6L6ArS+N5EGo6olZc
+    yx0rO4Lx6doEGWo69dZCrCNl320zEi0wtztMtrhAy/2PftZSlmGmIB2I9KXGsvH/
+    wDtOD4PtvpS9l+Tncb+taRCsfaKLqKafN0FFP/SSJb1Gz5D6pqNuofHfYgv6sgXc
+    1wgt0xHAPdicSq6MRft23HDK7cIbs7H/s01q/eIDadM0emS6kw8k/3VqoXJlphrp
+    wSjS/J95G+DiBcTbIvqSE5HQQ0jToa6Dz0h8vwIDAQABAoIBAQDMdTl/9BlH+n/n
+    YDcVznoy/ouUwrRYL69PDcJT64Vs5lMnD6DCt7gtT30BN36CzgvMtocd5hpGMC04
+    9pt5KP8rNdbzIdlnuklP9kWAWrqk+xHXxv56I6CgLEPaBxuI95cr8bSRpM8PXPVJ
+    7jMyDHJv6pJqzIW6Oh6qRIgEZqXuSPUoRTpnNKTUhmXHvoF3v/5hNEHtDhlz4D/X
+    CYpoByHT442m+JkJcl9w9F6SXpmjda5vgBxnRrF2/PPR0bW/kZwFpVRij4fHiSO4
+    XWlRGqv3YSc678YTuDWbIdB90CsHhbZL7jDPUaSptIWgwd8i+qe+G1c2eLM3PL3F
+    7Xc59BSpAoGBAPE2MPFlhlxbAFrU0h1lhrTOUviS0DYB6QSEWjvcXCTuFIdaUP+N
+    xKv5aC0+X3klrF0yU9kH68twHWDywW/36UiA7jAlB8sXEBqiaHnThIOT7wGFbplG
+    Nqinqp/FDeoe1b1pS9YMasiZ42IJyzy902J2aFv3CHNb++2EM6cdX7VVAoGBAOCO
+    +Lmbqu5YYQrpIOSsdUmQ40LGm5Fm0I75imNr5i6QqfgVmHpLw9KkmQMmQqe/Fi+P
+    u7uv9LJ/79AuioQjjuJcA2BWZsM2/DWKJlwLqSzOIIe9Nc2zAzgs23okMmPIQVD1
+    vOEUyqL/DpLVylg1pv3a+jNKZ+Sr1DvW2K9l++nDAoGAfniFbOxoaGAmbXmMuXEU
+    EhTkGAUSOl8CCCZFEYHWpl5WUSmfsn5okirw3lgHwwNnvm223OJ0VXRxUvW1SrnX
+    jPZc7M1dqrRq8ywYT1gB8ONNu6R0etT/r6pJof+17f1A4FEnPBHCo29cc3jjIPP+
+    s2+WBDIgMiwWiVB5rLOQDQkCgYEAmGlRdaCrPkQr8VzTn4FRxdGZ/duRAPoYecHy
+    5JH6VAaJ5kC6Ed9UlKZ02Adi3Dm81CEpGTVOzsw4t0Kvbwo3U3mCLSPXcY3jVm9i
+    o7yiYS+yMo8AcpGakMkZWegxbzoe4tU3EkmrUz/r40tJn98ibU/v21oX88OQM+EZ
+    hsqgVUMCgYAH9LKtpfBfK8Zl3itBr1dpCVt1h2WqL9c4VTwdoAa3hmlTOLm1d+b0
+    aZHnWt5QwHJpu8diFNnPNx/BINAv6A7AvAcjWOjQeI93VkvHPx6LsPrf11oau8ui
+    8bzZ+lr23d8tY+PNM7vXJx2fGT32hoqOw0blXsHikUMz7DWHhsh1nQ==
+    -----END RSA PRIVATE KEY-----
+  public_key: |
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA05YhPcD7+FWysWeKFXSH
+    nqmWnL+hKUbhkWFoIm6xpfFb1AvZ/rNGcVKhsKZqabHCEuMoK75WFGQ/qf5cTYTD
+    6Sw2UT88tfh6L6ArS+N5EGo6olZcyx0rO4Lx6doEGWo69dZCrCNl320zEi0wtztM
+    trhAy/2PftZSlmGmIB2I9KXGsvH/wDtOD4PtvpS9l+Tncb+taRCsfaKLqKafN0FF
+    P/SSJb1Gz5D6pqNuofHfYgv6sgXc1wgt0xHAPdicSq6MRft23HDK7cIbs7H/s01q
+    /eIDadM0emS6kw8k/3VqoXJlphrpwSjS/J95G+DiBcTbIvqSE5HQQ0jToa6Dz0h8
+    vwIDAQAB
+    -----END PUBLIC KEY-----
+  cert: |
+    -----BEGIN CERTIFICATE-----
+    MIIDhzCCAm+gAwIBAgIBADANBgkqhkiG9w0BAQUFADA6MQswCQYDVQQGEwJCRTEN
+    MAsGA1UECgwEVGVzdDENMAsGA1UECwwEVGVzdDENMAsGA1UEAwwEVGVzdDAeFw0x
+    NjA1MDYxNTUyNDNaFw0yNjA1MDQxNTUyNDNaMDoxCzAJBgNVBAYTAkJFMQ0wCwYD
+    VQQKDARUZXN0MQ0wCwYDVQQLDARUZXN0MQ0wCwYDVQQDDARUZXN0MIIBIjANBgkq
+    hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA05YhPcD7+FWysWeKFXSHnqmWnL+hKUbh
+    kWFoIm6xpfFb1AvZ/rNGcVKhsKZqabHCEuMoK75WFGQ/qf5cTYTD6Sw2UT88tfh6
+    L6ArS+N5EGo6olZcyx0rO4Lx6doEGWo69dZCrCNl320zEi0wtztMtrhAy/2PftZS
+    lmGmIB2I9KXGsvH/wDtOD4PtvpS9l+Tncb+taRCsfaKLqKafN0FFP/SSJb1Gz5D6
+    pqNuofHfYgv6sgXc1wgt0xHAPdicSq6MRft23HDK7cIbs7H/s01q/eIDadM0emS6
+    kw8k/3VqoXJlphrpwSjS/J95G+DiBcTbIvqSE5HQQ0jToa6Dz0h8vwIDAQABo4GX
+    MIGUMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFNo5o+5ea0sNMlW/75VgGJCv
+    2AcJMGIGA1UdIwRbMFmAFNo5o+5ea0sNMlW/75VgGJCv2AcJoT6kPDA6MQswCQYD
+    VQQGEwJCRTENMAsGA1UECgwEVGVzdDENMAsGA1UECwwEVGVzdDENMAsGA1UEAwwE
+    VGVzdIIBADANBgkqhkiG9w0BAQUFAAOCAQEAWrxwj2tA4veMfY23h81KmCHNMiWX
+    KLVd+UHGmGx7Io1VHdtB94wc7veakLisHT9GRa+UydCO9z7FzpAhb9N32jg7gZJI
+    ZRSrJkAUiEqo9G83V9e1Gld8bSGUxoAq3QENmYhw+ZRY8Fx0OLwEDFSTCe4u1D63
+    RZQq8n8lbPfchPoK0NXiJPt4JXsqjj1C4wYMQ0CODhkIdAUULHy4k+Xk+/pLP6gP
+    17zRouSlfXDPW8KbvsLWZJ26tGfv95mXC4HhHd2lVfudP+S2ExdU/el/raz5YnNY
+    Fj67XJdeSH805xQYv2fLwiXJPfO6aat+3AcKy6QnQYo1Sl+6LbcwRFsPHw==
+    -----END CERTIFICATE-----
